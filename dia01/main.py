@@ -23,7 +23,7 @@ class Conta:
         self.limite = 500
         self.numero_saques = 0
         self.limite_saques = 3
-        self.extrato = []
+        self.extrato = ""
         
     def depositar(self, valor):
         """ Faz depósito na conta """
@@ -35,10 +35,11 @@ class Conta:
             
     def sacar(self, valor):
         """ Saca dinheiro da conta """
-        if self.numero_saques < self.LIMITE_SAQUES:
+        if self.numero_saques < self.limite_saques:
             if valor <= self.saldo:
                 self.saldo -= valor
                 self.registrar_transacao("Saque", -valor)
+                self.numero_saques += 1
             elif valor < 0:
                 print("Operação falhou. O valor do saque deve ser superior a R$0.")
             else:
@@ -56,7 +57,7 @@ class Conta:
         print(f"Saldo: {self.saldo}")
             
     def registrar_transacao(self, tipo, valor):
-        data_hora = datetime.now().strtime("%d/%m/%Y %H: %M: %S")
+        data_hora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.extrato += f"{tipo}:\t\tR$ {valor:>10.2f} ({data_hora})\n"
 
 class Banco:
