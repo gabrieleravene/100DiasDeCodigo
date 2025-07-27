@@ -18,7 +18,7 @@ class Laboratorio:
         
         novo_paciente = Paciente(nome, cpf, data_nascimento)
         self.pacientes.append(novo_paciente)
-        print("Noov paciente cadastrado com sucesso.")
+        print("Novo paciente cadastrado com sucesso.")
         return novo_paciente
         
     def cadastrar_exame(self, nome, paciente, data):
@@ -55,3 +55,34 @@ class Exame:
         
     def __str__(self):
         return f"Nome: {self.nome}, Paciente: {self.exame}, Data: {self.data}, Laudo: {self.laudo}"
+    
+if __name__ == "__main__":
+    laboratorio = Laboratorio()
+    
+    while True:
+        print(""" SISTEMA DE GESTÃO LABORATORIAL:
+              1 - Cadastrar paciente
+              2 - Cadastrar exame
+              3 - Encerrar programa
+              """)
+        
+        opcao = input("Digite a opção desejada: ")
+        
+        if opcao == "1":
+            nome = input("Nome: ")
+            cpf = input("CPF: ")
+            data_nascimento = input("Data de nascimento: ")
+            laboratorio.cadastrar_paciente(nome, cpf, data_nascimento)
+            
+        elif opcao == "2":
+            nome = input("Exame: ")
+            paciente = input("Paciente: ")
+            data = input("Data: ")
+            laboratorio.cadastrar_exame(nome, paciente, data)
+            
+        elif opcao == "3":
+            print("Encerrando programa...")
+            break
+        
+        else:
+            print("Opção inválida.")
