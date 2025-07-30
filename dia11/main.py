@@ -88,6 +88,7 @@ class Analista:
             f"Data de nascimento: {self.data_nascimento} \n" 
             f"Registro: {self.registro}"
         )
+        
 class Paciente:
     def __init__(self, nome, cpf, data_nascimento, prontuario=None):
         self.nome = nome
