@@ -45,7 +45,7 @@ class Laboratorio:
     def cadastrar_exame(self, nome, paciente, data_str):
         data = datetime.strptime(data_str, "%d/%m/%Y")
         solicitacao = len(self.exames) + 1
-        novo_exame = Exame(nome, paciente, solicitacao, data)
+        novo_exame = Exame(nome, paciente, data, solicitacao)
         self.exames.append(novo_exame)
         print("Exame cadastrado com sucesso!"
               f"{novo_exame}")
@@ -61,7 +61,6 @@ class Laboratorio:
                 print("Exame assinado com sucesso.")
                 return
         print("Solicitação não encontrada.")
-        
         
     def exibir_pacientes(self):
         for paciente in self.pacientes:
@@ -116,7 +115,7 @@ class Exame:
     def __str__(self):
         texto = (
             f"Nome: {self.nome} \n" 
-            f"Paciente: {self.paciente} (Prontuário: {self.paciente.prontuario}) \n" 
+            f"Paciente: {self.paciente.nome} (Prontuário: {self.paciente.prontuario}) \n" 
             f"Data: {self.data.strftime('%d/%m/%Y') if self.data else 'Não informada'} \n" 
             f"Laudo: {self.laudo}"
             )
@@ -152,9 +151,8 @@ if __name__ == "__main__":
             
         elif opcao == "2":
             nome = input("Exame: ")
-            paciente = input("Paciente: ")
-            data = input("Data: ")
-            laboratorio.cadastrar_exame(nome, paciente, data)
+            cpf = input("CPF do paciente: ")
+            data = input("Data: (formato DD/MM/AAAA)")
             
             paciente_obj = None
             for paciente in laboratorio.pacientes:
@@ -163,7 +161,7 @@ if __name__ == "__main__":
                     break
             
             if paciente_obj:
-               laboratorio.cadastrar_exame(nome, cpf, data_nascimento)
+               laboratorio.cadastrar_exame(nome, paciente_obj, data)
             else:
                 print("Paciente não encontrado.")
                 
