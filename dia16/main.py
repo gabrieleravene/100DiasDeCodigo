@@ -3,11 +3,8 @@
 # o sistema possui as funcionalidades:
 # 1 - cadastrar um livro 
 # 2- cadastrar leitor
-# 3 - emprestar livro
-# 4 - devolver livro
 
 import sqlite3
-from datetime import datetime
 
 def criar_banco_de_dados():
     try:
@@ -19,8 +16,9 @@ def criar_banco_de_dados():
                 titulo TEXT,
                 autor TEXT,
                 ano DATE,
-                quantidade INT,
-                isbn TEXT) """)
+                isbn TEXT,
+                quantidade INT
+                ) """)
             
             cursor.execute(""" CREATE TABLE IF NOT EXISTS leitores (
                 id_leitor INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,18 +26,6 @@ def criar_banco_de_dados():
                 cpf TEXT,
                 data_nascimento DATE
                 ) """)
-            
-            cursor.execute(""" CREATE TABLE IF NOT EXISTS emprestimos (
-                id_emprestimo INTEGER PRIMARY KEY AUTOINCREMENT,
-                id_leitor INTEGER,
-                id_livro INTEGER,
-                livro_titulo TEXT,
-                livro_isbn TEXT,
-                quantidade INT,
-                data_emprestimo DATE,
-                data_devolucao DATE,
-                FOREIGN KEY (id_leitor) REFERENCES leitores(id_leitor),
-                FOREIGN KEY (id_livro REFERENCES livros(id_livro)) """)
             
             conexao.commit()
             print("Banco de dados criado com sucesso.")
@@ -55,15 +41,15 @@ class Biblioteca:
             with sqlite3.connect("biblioteca.db") as conexao:
                 cursor = conexao.cursor()
                 
-                cursor.execute (" SELECT * from livros (titulo, autor, ano isbn, quantidade) WHERE isbn = ? ", (isbn,))
+                cursor.execute (" SELECT * from livros WHERE isbn = ? ", (isbn,))
                 livro_procurado = cursor.fetchone()
                 
                 if livro_procurado:
                     print("Livro já cadastrado!")
                 else:
-                    cursor.execute(" INSERT INTO livros (titulo, autor, ano, isbn, quantidade) VALUES (?, ?, ?, ?, ?) ", (titulo, autor, isbn, quantidade))
+                    cursor.execute(" INSERT INTO livros (titulo, autor, ano, isbn, quantidade) VALUES (?, ?, ?, ?, ?) ", (titulo, autor, ano, isbn, quantidade))
                     
-                    conexao.commmit()
+                    conexao.commit()
                     
                     print("Livro cadastrado com sucesso!")
             
@@ -75,7 +61,7 @@ class Biblioteca:
                 with sqlite3.connect("biblioteca.db") as conexao:
                     cursor = conexao.cursor()
                     
-                    cursor.execute(" SELECT * FROM leitores (nome, cpf, data_nascimento) WHERE cpf = ?", (cpf,))
+                    cursor.execute(" SELECT * FROM leitores WHERE cpf = ?", (cpf,))
                     cpf_procurado = cursor.fetchone()
                     
                     if cpf_procurado:
@@ -96,8 +82,8 @@ class Livro:
         self.titulo = titulo
         self.autor = autor
         self.ano = ano
-        self.quantidade = quantidade
         self.isbn = isbn # número único que identifica cada livro
+        self.quantidade = quantidade
         
     def __str__(self):
         return f"Título: {self.titulo}, Autor: {self.autor}, Ano: {self.ano}, Quantidade: {self.quantidade}"
@@ -110,12 +96,37 @@ class Leitor:
         
 if __name__ == "__main__":
     criar_banco_de_dados()
+    biblioteca = Biblioteca()
     
     while True:
         print("""SISTEMA DE GESTÃO LABORATORIAL
               1 - Cadastrar livro
               2 - Cadastrar leitor
-              3 - Emprestar livro
-              4 - Devolver livro
-              5 - Encerrar programa
+              3 - Encerrar programa
               """)
+        
+        opcao = input("Digite a opção desejada: ")
+        
+        if opcao == '1':
+            try:
+               titulo = input("Título do livro: ")
+               autor = input("Autor: ")
+               ano = input("Ano: ")
+               isbn = input("ISBN: ")
+               quantidade = int(input("Quantidade: "))
+               biblioteca.cadastrar_livro(titulo, autor, ano, isbn, quantidade)
+            except ValueError:
+                print("Valor inválido. Digite um valor de quantidade numérica válida.")
+                
+        elif opcao == '2':
+            nome = input("Nome: ")
+            cpf = input("CPF: ")
+            data_nascimento = input("Data de nascimento: ")
+            biblioteca.cadastrar_leitor(nome, cpf, data_nascimento)
+            
+        elif opcao == '3':
+            print("Encerrando programa...")
+            break
+        
+        else:
+            print("Opção inválida.")
