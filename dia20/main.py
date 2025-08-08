@@ -50,6 +50,31 @@ def criar_banco_de_dados():
     except sqlite3.Error as erro:
         print(f"Erro ao criar banco de dados: {erro}")
         
+
+class Cliente:
+    def __init__(self, nome_completo, cpf, data_nascimento):
+        self.nome = nome_completo
+        self.cpf = cpf
+        self.data_nascimento = data_nascimento
+        
+class Medicamento:
+    def __init__(self, nome, data_fab, data_val, lote, classificacao, quantidade=None, dose=None):
+        self.nome = nome
+        self.data_fab = data_fab
+        self.data_val = data_val
+        self.lote = lote
+        self.classificacao = classificacao
+        self.quantidade = quantidade
+        self.dose = dose
+        
+class Compra:
+    def __init__(self, id_cliente, id_medicamento, valor_unitario=None, quantidade=None, valor_total=None):
+        self.id_cliente = id_cliente
+        self.id_medicamento = id_medicamento
+        self.valor_unitario = valor_unitario
+        self.quantidade = quantidade
+        self.valor_total = valor_total
+        
 class Farmacia:
     def __init__(self, nome, cnpj, responsavel):
         self.nome = nome
@@ -140,30 +165,6 @@ class Farmacia:
                         
             except sqlite3.Error as erro:
                 print(f"Erro ao comprar medicamento: {erro}")
-
-class Cliente:
-    def __init__(self, nome_completo, cpf, data_nascimento):
-        self.nome = nome_completo
-        self.cpf = cpf
-        self.data_nascimento = data_nascimento
-        
-class Medicamento:
-    def __init__(self, nome, data_fab, data_val, lote, classificacao, quantidade=None, dose=None):
-        self.nome = nome
-        self.data_fab = data_fab
-        self.data_val = data_val
-        self.lote = lote
-        self.classificacao = classificacao
-        self.quantidade = quantidade
-        self.dose = dose
-        
-class Compra:
-    def __init__(self, id_cliente, id_medicamento, valor_unitario=None, quantidade=None, valor_total=None):
-        self.id_cliente = id_cliente
-        self.id_medicamento = id_medicamento
-        self.valor_unitario = valor_unitario
-        self.quantidade = quantidade
-        self.valor_total = valor_total
         
 if __name__ == "__main__":
     criar_banco_de_dados()
